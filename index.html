@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" manifest="manifest.appcache">
+	<head>
+	  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	  <link rel="stylesheet" href="space_invaders.css" type="text/css"/>
+		<script src="jquery-1.4.4.min.js" type="text/javascript"></script>
+		<script src="space_invaders.js" type="text/javascript"></script>
+		<script src="player.js" type="text/javascript"></script>
+		<script src="enemies.js" type="text/javascript"></script>
+		<script src="projectile.js" type="text/javascript"></script>
+		<title>Space Invaders</title>
+	</head>
+	<body>
+	  <header>
+	    <h1>Space Invaders</h1>
+	  </header>
+		<div class="container clearfix">
+		  <div class="info">
+  		  <p class="info_label lives">Lives</p> <p id="player_lives" class="info_value"></p>
+    		<p class="info_label level">Level</p> <p id="player_level" class="info_value"></p>
+    		<p class="info_label score">Score</p> <p id="player_score" class="info_value"></p>
+    		<a href="#" class="help" alt="help">?</a>
+    	</div>
+			<div class="hud">
+				<div id="alert"></div>
+			</div>
+			<div id="instructions" style="display:none;">
+			  <a href="#" class="close" alt="close">X</a>
+  		  <ul>
+  		    <li><pre>left arrow</pre> - move space ship left</li>
+  		    <li><pre>right arrow</pre> - move space ship right</li>
+  		    <li><pre>space bar</pre> - shoot</li>
+  		    <li><pre>P</pre> - pause game</li>
+  		  </ul>
+  		</div>
+			<canvas id="space-invaders" width="500" height="300"></canvas>
+		</div>
+	</body>
+</html>

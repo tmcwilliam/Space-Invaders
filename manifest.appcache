@@ -1,0 +1,22 @@
+CACHE MANIFEST
+#version: 1.0
+
+CACHE:
+jquery-1.4.4.min.js
+space_invaders.js
+players.js
+enemies.js
+projectile.js
+
+space_invaders.css
+
+images/eprojectile.png
+images/eprojectile2.png
+images/invader1.png
+images/invader12.png
+images/invader2.png
+images/invader22.png
+images/projectile.png
+images/ship.png
+
+index.html
