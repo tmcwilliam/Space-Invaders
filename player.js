@@ -26,14 +26,14 @@ var _global = this;
 	// public 
 	Player.prototype.update = function (){
 
-		if (rightDown == true){
+		if (rightDown === true){
 			/* check if ship is at the right edge of canvas */
 			if (this.x + (this._width + this._edge) <= canvas.width){
 				this.x += this._speed;
 			}
 		}
 		
-		if (leftDown == true){
+		if (leftDown === true){
 			/* check if ship is at the left edge of canvas */
 			if (this.x - this._edge >= 0){
 				this.x -= this._speed;

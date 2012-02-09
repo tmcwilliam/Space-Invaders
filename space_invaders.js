@@ -5,7 +5,7 @@
 * This is an experimental project in order to learn more about the HTML5 <canvas> tag and hopefull pick up other knowledge as well.
 */
 
-$(document).ready(function(){init();})
+$(document).ready(function(){init();});
 
 /* Local variables */
 var canvas;
@@ -101,7 +101,7 @@ $(document).keydown(function(evt){
   }
 	// 'P' key to pause game
 	if(evt.keyCode == 80 && !gameOver){
-		pause = pause == true ? false : true;
+		pause = pause === true ? false : true;
 		if(pause){
 			$('#alert').text("Paused");
 			$('#alert').fadeIn(1000);
@@ -148,14 +148,14 @@ function newEnemyPlatoon(){
 	
 	// Remove any existing projectiles or anliens from cache
 	removeProjectiles();
-	for(var eid in enemies){
+	for(var eid = 0; eid < enemies.length; eid++){
 		delete enemies[eid];
 	}
 	
 	// Display platoon
 	for(var i=0; i<6;i++){
 		for(var j=0; j<11;j++){
-			if(i==0){
+			if(i===0){
 				enemy = new Enemy(10 + (j * 30), 25 + (i * 20), orangeAlien, orangeAlienA, 200);
 			} else {
 				enemy = new Enemy(10 + (j * 30), 25 + (i * 20), redAlien, redAlienA, 100);
@@ -176,7 +176,7 @@ function removeProjectile(projectile){
 }
 
 function removeProjectiles(){
-	for(var pid in projectiles){
+	for(var pid = 0; pid < projectiles.length; pid++){
 		delete projectiles[pid];
 	}
 }
@@ -257,7 +257,7 @@ function update(){
 		context.drawImage(player.imgSrc, player.x, player.y);
 		
 		//update enemy platoon position
-		if (changeDirection == true){
+		if (changeDirection === true){
 			changeDirection = false;
 			enemyDirection = -enemyDirection;
 			enemySpeed = -enemySpeed;
@@ -265,12 +265,12 @@ function update(){
 		}
 		
 		// Loop thru cache of enemies to update position and random fire
-		for (var id in enemies) {
-			var enemy = enemies[id];
+		$.each(enemies, function(index, value){
+			var enemy = enemies[index];
 			var e_img = enemy._frame == 1 ? enemy.imgSrc : enemy.imgSrcA;
 			enemy.update(100, player);
 			
-			if (enemy._fire == true){
+			if (enemy._fire === true){
 				enemy._fire = false;
 				var projectile = new Projectile(enemy.x + (enemy._width/2), enemy.y + 10, eProjImage, eProjImageA, -5, 2);
 				addProjectile(projectile);
@@ -278,16 +278,16 @@ function update(){
 			
 			//KEY POINT: use drawImage() to draw enemy image
 			context.drawImage(e_img, enemy.x, enemy.y);
-		}
+		});
 		enemyYShift = 0;
 		
 		// draw projectiles based on frame and coordinates
-		for (var id in projectiles) {
-			var projectile = projectiles[id];
-			var p_img = projectile.frame == 1 ? projectile.imgSrc : projectile.imgSrcA;
-			projectile.update();
-			context.drawImage(p_img, projectile.x, projectile.y);
-		}
+		$.each(projectiles, function(index, value){
+			var bullet = projectiles[index];
+			var p_img = bullet.frame == 1 ? bullet.imgSrc : bullet.imgSrcA;
+			bullet.update();
+			context.drawImage(p_img, bullet.x, bullet.y);
+		});
 		
 		checkHits();
 		
@@ -299,44 +299,50 @@ function update(){
 function checkHits(){
 	//check if enemy or player is hit
 	for(var id in projectiles){
-		var projectile = projectiles[id];
 		
-		// check if player projectile hit an enemy
-		if(projectile._type == 1){
-			for(var eid in enemies){
-				var enemy = enemies[eid];
-				if (projectile.x >= enemy.x && projectile.x <= (enemy.x + enemy._width)){
-					if (projectile.y <= (enemy.y + enemy._height) && projectile.y >= (enemy.y)){
-						removeEnemy(enemy);
-						if(enemyCount == 0){
-							newEnemyPlatoon();
-							player._level++;
-							newLevelTransition();
+		if(projectiles.hasOwnProperty(id)){
+			var projectile = projectiles[id];
+		
+			// check if player projectile hit an enemy
+			if(projectile._type == 1){
+				for(var eindex in enemies){
+					
+					if (enemies.hasOwnProperty(eindex)) {
+						var bad_guy = enemies[eindex];
+						if (projectile.x >= bad_guy.x && projectile.x <= (bad_guy.x + bad_guy._width)){
+							if (projectile.y <= (bad_guy.y + bad_guy._height) && projectile.y >= (bad_guy.y)){
+								removeEnemy(bad_guy);
+								if(enemyCount === 0){
+									newEnemyPlatoon();
+									player._level++;
+									newLevelTransition();
+								}
+								removeProjectile(projectile);
+							}
 						}
+					}
+					
+				}
+			// check if enemy projectile hit player
+			} else if(projectile._type == 2) {
+				if(projectile.x >= player.x && projectile.x <= (player.x + player._width)){
+					if(projectile.y <= (player.y + player._height) && projectile.y >= (player.y)){
 						removeProjectile(projectile);
+						player._lives--;
+						player_hit = true;
 					}
 				}
 			}
-		// check if enemy projectile hit player
-		} else if(projectile._type == 2) {
-			if(projectile.x >= player.x && projectile.x <= (player.x + player._width)){
-				if(projectile.y <= (player.y + player._height) && projectile.y >= (player.y)){
-					removeProjectile(projectile);
-					player._lives--;
-					player_hit = true;
-				}
-			}
-		}
 		
-		// check if projectile has left the canvas area
-		if (projectile.y <=0 || projectile.y > canvas.height){
-			removeProjectile(projectile);
-		}
-				
+			// check if projectile has left the canvas area
+			if (projectile.y <=0 || projectile.y > canvas.height){
+				removeProjectile(projectile);
+			}
+		}	
 	}
 	
 	// check if enemy has collided with player or bottom of canvas
-	for(var eid in enemies){
+	for(var eid=0; eid < enemies.length; eid++){
 		var enemy = enemies[eid];
 		var enemy_bottom = enemy.y + enemy._height;
 		var enemy_right = enemy.x + enemy._width;
